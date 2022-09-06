@@ -20,3 +20,6 @@ eureka:
       defaultZone: ${EUREKA_URI:http://localhost:9090/eureka}
 server:
   port: 9092
+uri:
+  party-service: http://localhost:9091/party/
+  development-service: http://localhost:9091/party/

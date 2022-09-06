@@ -8,7 +8,7 @@ import com.leader.leaderservice.model.LeaderDTO;
 import com.leader.leaderservice.model.LeaderDevDTO;
 import com.leader.leaderservice.repository.LeaderRepository;
 import com.leader.leaderservice.services.LeaderService;
-import com.leader.leaderservice.services.LeaderUtility;
+import com.leader.leaderservice.utility.LeaderUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,9 @@ public class LeaderServiceImpl implements LeaderService {
 
     @Autowired
     private LeaderRepository leaderRepository;
+
+    @Autowired
+    private RemoteServiceHelper remoteServiceHelper;
 
     /**
      * List all the development works assigned.
@@ -38,7 +41,7 @@ public class LeaderServiceImpl implements LeaderService {
         leaderDevDTO.setLeaderDTO(LeaderUtility.convertToDTO(leader));
 
 //        Find the development work details
-        List<DevelopmentDTO> developmentDTOS = LeaderUtility.getDevelopmentDetails(partyId, leaderId);
+        List<DevelopmentDTO> developmentDTOS = remoteServiceHelper.getDevelopmentDetails(partyId, leaderId);
         leaderDevDTO.setDevelopmentDTO(developmentDTOS);
         return leaderDevDTO;
     }
@@ -53,7 +56,7 @@ public class LeaderServiceImpl implements LeaderService {
     @Override
     public LeaderDTO registerALeader(LeaderDTO leaderDTO) throws NoSuchPartyExistException {
         // Check if party is already existing, otherwise throw exception
-        LeaderUtility.findPartyById(leaderDTO.getPartyId())
+        remoteServiceHelper.findPartyById(leaderDTO.getPartyId())
                 .orElseThrow(() -> new NoSuchPartyExistException(leaderDTO.getPartyId()));
         Leader leader = LeaderUtility.convertToEntity(leaderDTO);
         Leader savedLeader = leaderRepository.save(leader);
