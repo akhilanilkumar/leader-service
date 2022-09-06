@@ -34,7 +34,7 @@ public class LeaderServiceImpl implements LeaderService {
         LeaderDevDTO leaderDevDTO = new LeaderDevDTO();
 //        Find Leader details
         Leader leader = leaderRepository.findById(leaderId)
-                .orElseThrow(() -> new NoSuchLeaderExistException("No matching records found for Leader: " + leaderId));
+                .orElseThrow(() -> new NoSuchLeaderExistException(leaderId));
         leaderDevDTO.setLeaderDTO(LeaderUtility.convertToDTO(leader));
 
 //        Find the development work details
@@ -54,7 +54,7 @@ public class LeaderServiceImpl implements LeaderService {
     public LeaderDTO registerALeader(LeaderDTO leaderDTO) throws NoSuchPartyExistException {
         // Check if party is already existing, otherwise throw exception
         LeaderUtility.findPartyById(leaderDTO.getPartyId())
-                .orElseThrow(() -> new NoSuchPartyExistException("No matching records found for a Party: " + leaderDTO.getPartyId()));
+                .orElseThrow(() -> new NoSuchPartyExistException(leaderDTO.getPartyId()));
         Leader leader = LeaderUtility.convertToEntity(leaderDTO);
         Leader savedLeader = leaderRepository.save(leader);
         return LeaderUtility.convertToDTO(savedLeader);
