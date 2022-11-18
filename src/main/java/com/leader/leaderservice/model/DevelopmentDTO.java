@@ -1,11 +1,13 @@
 package com.leader.leaderservice.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Set;
 
 @Data
+@Builder
 public class DevelopmentDTO implements Serializable {
     private Long id;
 
